@@ -1,0 +1,17 @@
+Config { font = "-*-terminus-bold-r-*-*-14-*-*-*-*-*-*-*"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = TopW L 80
+       , commands = [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+                    , Run Memory ["-t","m: <usedratio>%"] 10
+                    , Run Swap [] 10
+                    , Run Date "%_d-%m %H:%M" "date" 10
+                    , Run Battery ["-c","energy_full", "-f","AC0/online", "-t", "<acstatus><timeleft>", "-L", "10", "-H", "80", "-p", "3", 
+                        "--", "-c","energy_full", "-f","AC0/online", "-O", "<fc=green>On</fc> - ", "-o", "", "-L", "-15", 
+                        "-H", "-5", "-l", "red", "-m", "blue", "-h", "green"] 10
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ [%cpu% %memory% * %swap%] <fc=#ffffff>%battery%</fc> <fc=#ee9a00>%date%</fc> "
+       }
