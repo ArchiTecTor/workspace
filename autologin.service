@@ -1,0 +1,36 @@
+
+[Unit]
+Description=Automatic GUI Login with NVIDIA Support, 
+Description=use ~/.xinitrc file to run your windows manager
+Description=and put startx command into end of ~/.profile file
+
+After=systemd-user-sessions.service multi-user.target nvidia-modprobe.service plymouth-quit-wait.service systemd-logind.service getty@tty1
+Wants=network.target nvidia-modprobe.service graphical.target systemd-logind.service
+Requires=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+Environment="DISPLAY=:0"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+Environment="XDG_SESSION_TYPE=x11"
+Environment="__GLX_VENDOR_LIBRARY_NAME=nvidia"
+ExecStartPre=/usr/sbin/modprobe nvidia-drm
+
+# change username for auto login here
+ExecStart=/sbin/agetty -o '-p -f archi' -a archi --noclear tty1 $TERM
+
+# for Wayland 
+# Environment="XDG_SESSION_TYPE=wayland"
+
+
+TTYPath=/dev/tty1
+Restart=on-failure
+KillSignal=SIGINT
+
+[Install]
+Alias=display-manager.service
+
+
+
+
+
